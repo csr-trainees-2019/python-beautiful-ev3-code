@@ -1,22 +1,39 @@
 from time import time
+''' pid obj prototype
+pid_obj = {
+    'setup': (0, 0, 0, 0), #kp, ki, kd, initial_value
 
-state = (0, 0, 0) #last, actual, wanted
-setup = (0, 0, 0) #kp, ki, kd
-(error_i, last_time) = (0, 0)
+    'error_i': 0,
+    'ini_val': 0,
+    'last_time': 0,
 
-def reset_pid():
-    (error_i, last_time) = (0, 0)
+    state: dict.fromkeys(['last', 'now', 'wanted'])
+}
+'''
 
-def pid(setup, state):
+def reset_pid(pid_obj):
+    pid_obj['error_i'] = 0
+    pid_obj['ini_val'] = 0
+    pid_obj['last_time'] = 0
 
-    dt = (time.time() - last_time) / 1000
-    last_time = time.time()
+def pid(pid_obj):
 
-    (kp, ki, kd) = setup
-    (last, actual, wanted) = state
+    dt = (time.time() - pid_obj['last_time']) / 1000
+    pid_obj['last_time'] = time.time()
 
-    error = wanted - actual
-    error_d = (error - (wanted - last)) / dt
-    error_i += error * dt
+    (kp, ki, kd, ini_val) = pid_obj['setup']
 
-    U = kp * error + ki * error_i + kd * error_d
+    error = state['wanted'] - state['now']
+    error_d = (error - (state['wanted'] - state['last'])) / dt
+    pid_obj['error_i'] += error * dt
+
+    new_state = 0
+    #new_state = (<Sensor> instance).<get_value>()
+
+    (pid_obj['state']['last'], pid_obj['state']['now']) = (pid_obj['state']['now'], new_state)
+
+    Ut = kp * error + ki * pid_obj['error_i'] + kd * error_d
+
+    value = ini_val + Ut
+
+    #(LargeMotor instance).run_direct(duty_cycle_sp = value)
