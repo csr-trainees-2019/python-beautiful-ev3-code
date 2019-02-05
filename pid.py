@@ -7,7 +7,10 @@ pid_obj = {
     'ini_val': 0,
     'last_time': 0,
 
-    state: dict.fromkeys(['last', 'now', 'wanted'])
+    'state': dict.fromkeys(['last', 'now', 'wanted']),
+
+    Motor: <...>,
+    Sensor: <...>
 }
 '''
 
@@ -28,7 +31,7 @@ def pid(pid_obj):
     pid_obj['error_i'] += error * dt
 
     new_state = 0
-    #new_state = (<Sensor> instance).<get_value>()
+    #new_state = Sensor.<get_value>()
 
     (pid_obj['state']['last'], pid_obj['state']['now']) = (pid_obj['state']['now'], new_state)
 
@@ -36,4 +39,4 @@ def pid(pid_obj):
 
     value = ini_val + Ut
 
-    #(LargeMotor instance).run_direct(duty_cycle_sp = value)
+    #Motor.<set_value>()
