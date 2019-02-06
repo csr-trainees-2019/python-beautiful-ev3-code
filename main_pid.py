@@ -8,9 +8,9 @@ def cut_abs(value, max):
 motor = LargeMotor('outA')
 motor.reset()
 
-(kp, ki, kd) = (20 / 180 * 3.14, 35 / 180 * 3.14, 0)
+(kp, ki, kd) = setup = (20, 35, 0)
 (err_p, err_i, err_d) = (0, 0, 0)
-state = {'last': 0, 'now': 0, 'wanted': 500}
+state = {'last': 0, 'now': 0, 'wanted': 50}
 
 upd_spd = 0.01
 last_time = time.time()
@@ -25,7 +25,7 @@ while operating:
     if windup != 0:
         err_i = err_i if abs(err_i) < windup else math.copysign(1, err_i) * windup
     err_i += err_p * dt
-    new_state = motor.position
+    new_state = motor.position / 180 * math.pi
     (state['last'], state['now']) = (state['now'], new_state)
     Ut = kp * err_p + ki * err_i + kd * err_d
     value = cut_abs(Ut, 100)

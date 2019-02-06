@@ -13,7 +13,7 @@ class PID:
         (self.error_i, self.last_time, self.upd_spd, self.wdup) = (0, time.time(), 0.01, 0)
         self.motor.reset()
 
-    def set_wanted_deg(self, wanted):
+    def set_wanted_rad(self, wanted):
         self.state['wanted'] = wanted
 
     def sed_upd_speed(self, new):
@@ -30,7 +30,7 @@ class PID:
         if self.wdup != 0:
             error_i = error_i if abs(error_i) < self.wdup else math.copysign(1, error_i) * self.wdup
         self.error_i += error * dt
-        new_state = self.motor.position
+        new_state = self.motor.position / 180 * math.pi
         (self.state['last'], self.state['now']) = (self.state['now'], new_state)
         Ut = self.kp * error + self.ki * self.error_i + self.kd * error_d
         value = cut_abs(Ut, 100)
