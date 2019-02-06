@@ -1,4 +1,4 @@
-from pid import *
+from modules.pid import *
 
 motor = LargeMotor('outA')
 setup = (20, 35, 0)
