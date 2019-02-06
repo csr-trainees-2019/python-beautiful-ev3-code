@@ -8,3 +8,4 @@ pidA.set_wanted_rad(50)
 
 while True:
 	pidA.proc()
+	time.sleep(0.01)
