@@ -1,11 +1,10 @@
 from pid import *
-from ev3dev.ev3 import *
 
 motor = LargeMotor('outA')
-setup = (1, 0, 0)
+setup = (20 / 180 * 3.14, 35 / 180 * 3.14, 0)
 
 pidA = PID(setup, motor)
-pidA.set_wanted(500)
+pidA.set_wanted_deg(500)
 
 while True:
 	pidA.proc()

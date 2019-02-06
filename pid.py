@@ -1,8 +1,9 @@
 import time
 import math
+from ev3dev.ev3 import *
 
 def cut_abs(value, max):
-    return  max * (value / abs(value)) if abs(value) > max else value
+    return max * math.copysign(1, value) if abs(value) > max else value
 
 class PID:
     def __init__(self, setup, motor):
@@ -12,7 +13,7 @@ class PID:
         (self.error_i, self.last_time, self.upd_spd, self.wdup) = (0, time.time(), 0.01, 0)
         self.motor.reset()
 
-    def set_wanted(self, wanted):
+    def set_wanted_deg(self, wanted):
         self.state['wanted'] = wanted
 
     def sed_upd_speed(self, new):
@@ -26,7 +27,7 @@ class PID:
         self.last_time = time.time()
         error = self.state['wanted'] - self.state['now']
         error_d = (error - (self.state['wanted'] - self.state['last'])) / dt
-        if self.wdup <> 0:
+        if self.wdup != 0:
             error_i = error_i if abs(error_i) < self.wdup else math.copysign(1, error_i) * self.wdup
         self.error_i += error * dt
         new_state = self.motor.position
