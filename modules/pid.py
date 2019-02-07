@@ -13,6 +13,12 @@ class PID:
         (self.error_i, self.last_time, self.wdup) = (0, time.time(), 0)
         self.motor.reset()
 
+    def set_motor(self, new):
+        self.motor = new
+
+    def set_setup(self, new):
+        (self.kp, self.ki, self.kd) = new
+
     def set_wanted_rad(self, wanted):
         self.state['wanted'] = wanted
 
@@ -33,6 +39,9 @@ class PID:
         value = cut_abs(Ut, 100)
         self.motor.run_direct(duty_cycle_sp = value)
 
+    def unreset(self):
+        self.last_time = time.time()
+
     def reset(self):
-        (self.last_time, self.error_i) = (0, 0)
+        (self.last_time, self.error_i) = (time.time(), 0)
         self.motor.stop(stop_action = 'brake')
