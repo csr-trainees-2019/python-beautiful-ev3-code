@@ -8,7 +8,7 @@ def cut_abs(value, max):
 motor = LargeMotor('outA')
 motor.reset()
 
-(kp, ki, kd) = setup = (20, 35, 0)
+(kp, ki, kd) = (20, 35, 0)
 (err_p, err_i, err_d) = (0, 0, 0)
 state = {'last': 0, 'now': 0, 'wanted': 50}
 

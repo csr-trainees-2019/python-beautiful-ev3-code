@@ -10,14 +10,17 @@ class PID:
         self.motor = motor
         (self.kp, self.ki, self.kd) = setup
         self.state = {'last': 0, 'now': 0, 'wanted': 0}
-        (self.error_i, self.last_time, self.upd_spd, self.wdup) = (0, time.time(), 0.01, 0)
+        (self.error_i, self.last_time, self.wdup) = (0, time.time(), 0)
         self.motor.reset()
+
+    def set_motor(self, new):
+        self.motor = new
+
+    def set_setup(self, new):
+        (self.kp, self.ki, self.kd) = new
 
     def set_wanted_rad(self, wanted):
         self.state['wanted'] = wanted
-
-    def sed_upd_speed(self, new):
-        self.upd_spd = new
 
     def set_wdup(self, new):
         self.wdup = new
@@ -35,8 +38,13 @@ class PID:
         Ut = self.kp * error + self.ki * self.error_i + self.kd * error_d
         value = cut_abs(Ut, 100)
         self.motor.run_direct(duty_cycle_sp = value)
-        time.sleep(self.upd_spd);
+
+    def get_state(self):
+        return self.state['now']
+
+    def unreset(self):
+        self.last_time = time.time()
 
     def reset(self):
-        (self.last_time, self.error_i) = (0, 0)
+        (self.last_time, self.error_i) = (time.time(), 0)
         self.motor.stop(stop_action = 'brake')
