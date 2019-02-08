@@ -39,6 +39,9 @@ class PID:
         value = cut_abs(Ut, 100)
         self.motor.run_direct(duty_cycle_sp = value)
 
+    def get_state(self):
+        return self.state['now']
+
     def unreset(self):
         self.last_time = time.time()
 

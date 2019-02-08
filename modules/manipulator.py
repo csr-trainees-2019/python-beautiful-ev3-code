@@ -6,6 +6,9 @@ class Mani:
         for pid in range(knots):
             self.pidlist.append(PID((0, 0, 0),LargeMotor('outA')))
 
+    def set_gear_ratios(self, ratiolist):
+        self.gear_ratio_list = ratiolist
+
     def set_motors(self, motorlist):
         if len(motorlist) != len(self.pidlist):
             return 'error';
@@ -24,8 +27,14 @@ class Mani:
         if len(wantedlist) != len(self.pidlist):
             return 'error';
         for i in range(1, len(self.pidlist)):
-            self.pidlist[i].set_wanted_rad(wantedlist[i])
+            self.pidlist[i].set_wanted_rad(wantedlist[i] * self.gear_ratio_list[i])
         return 'ok'
+
+    def get_state(self):
+        to_ret = []
+        for i in range(1, len(self.pidlist)):
+            to_ret.append(self.pidlist[i].get_state() / self.gear_ratio_list[i])
+        return to_ret
 
     def set_wdups(self, wduplist):
         if len(wduplist) != len(self.pidlist):

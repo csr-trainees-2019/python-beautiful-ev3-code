@@ -1,2 +1,3 @@
 # python-beautiful-ev3-code
-Beautiful code in python lang for ev3
+
+Код для вставления в методичку по манипуляторам, которую мы пишем на практике в Университете ИТМО.
