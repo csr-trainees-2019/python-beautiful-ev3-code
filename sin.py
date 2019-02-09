@@ -27,6 +27,6 @@ while True:
     motor.run_direct(duty_cycle_sp = value)
     volts = value / 100 * power.measured_volts
     pos = motor.position / 180 * math.pi
-    file_handle.write(str(ltime) + " " + str(pos) + " " + str(volts) + "\n")
+    file_handle.write(str(time) + " " + str(pos) + " " + str(volts) + "\n")
 
 file.close()
