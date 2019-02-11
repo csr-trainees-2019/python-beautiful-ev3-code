@@ -34,13 +34,13 @@ class PID:
         self.wdup = new
 
     def proc(self):
-        dt = (time.time() - self.last_time) / 1000
+        dt = (time.time() - self.last_time)
         self.last_time = time.time()
         error = self.state['wanted'] - self.state['now']
         error_d = (error - (self.state['wanted'] - self.state['last'])) / dt
-        if self.wdup != 0:
-            error_i = error_i if abs(error_i) < self.wdup else math.copysign(1, error_i) * self.wdup
         self.error_i += error * dt
+        if self.wdup != 0:
+            self.error_i = self.error_i if abs(self.error_i) < self.wdup else math.copysign(1, self.error_i) * self.wdup
 
         new_state = self.motor.position / 180 * math.pi
         if new_state > self.pos_lim:
@@ -53,6 +53,7 @@ class PID:
         (self.state['last'], self.state['now']) = (self.state['now'], new_state)
         Ut = self.kp * error + self.ki * self.error_i + self.kd * error_d
         value = cut_abs(Ut, 100)
+        print(dt)
 
         if self.LIMIT_ERR != 0:
             if math.copysign(1, self.LIMIT_ERR) == math.copysign(1, value):

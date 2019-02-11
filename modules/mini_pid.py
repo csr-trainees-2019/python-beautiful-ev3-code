@@ -26,7 +26,7 @@ class PID:
         self.LIMIT_ERR = 0
 
     def proc(self):
-        dt = (time.time() - self.last_time) / 1000
+        dt = (time.time() - self.last_time)
         self.last_time = time.time()
         error = self.state['wanted'] - self.state['now']
         error_d = (error - (self.state['wanted'] - self.state['last'])) / dt
