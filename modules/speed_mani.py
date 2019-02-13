@@ -8,7 +8,7 @@ class Manispd:
             self.pilist.append(PI(setuplist[i], motors[i], wduplist[i]))
 
     def set_state_spd(self, wantedlist):
-        for i in range(0, len(self.pidlist)):
+        for i in range(0, len(self.pilist)):
             self.pilist[i].set_wanted_spd(wantedlist[i] * self.gear_ratio_list[i])
 
     def get_state_spd(self):
