@@ -11,31 +11,32 @@ setup = [
     (20, 35, 0)
 ]
 
-neg_lims = [-pi, -pi/4, -pi]
+neg_lims = [-pi, -pi, -pi]
 pos_lims = [pi, pi, pi]
 
 man = Mani(3, motors, setup, [7, 5.5, 5.5])
-man.set_state([0, -pi / 2, -pi / 2])
 man.set_limits(neg_lims, pos_lims)
 
 processing = True
+
+man.set_state([pi / 2, pi / 2, pi / 2])
+
 while processing:
     print("<>")
     man.proc()
-    if man.is_competed(0.5):
+    if man.is_competed(1):
         break
 
+man.set_state([-pi / 2, -pi / 2, -pi / 2])
 
-man.set_state([0, pi / 2, 0])
-
-processing = True
 while processing:
+    print("<>")
     man.proc()
-    if man.is_competed(0.5):
+    if man.is_competed(1):
         break
 
 
-print('finish2')
+
 '''
 pi = math.pi
 
