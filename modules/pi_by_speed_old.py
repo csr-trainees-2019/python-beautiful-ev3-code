@@ -17,7 +17,7 @@ class PI:
         (self.error_i, self.last_time, self.wdup) = (0, time.time(), 0)
         self.motor.reset()
         self.wdup = wdup
-        self.file_handle = open('log_pi5_fi.txt', 'w')
+        self.file_handle = open('log_pi_new/log_pi_new6.txt', 'w')
         self.launch_time = time.time()
         self.power = PowerSupply()
 
@@ -30,7 +30,7 @@ class PI:
         error = self.state['wanted_spd'] - self.state['now_spd']
         self.error_i += error * dt
         if self.wdup != 0:
-            self.error_i = error_i if abs(error_i) < self.wdup else math.copysign(1, error_i) * self.wdup
+            self.error_i = self.error_i if abs(self.error_i) < self.wdup else math.copysign(1, self.error_i) * self.wdup
 
         new_state_pos = self.motor.position / 180 * math.pi / 5.5
         (self.state['last_pos'], self.state['now_pos']) = (self.state['now_pos'], new_state_pos)
