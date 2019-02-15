@@ -52,7 +52,11 @@ class PID:
 
         (self.state['last'], self.state['now']) = (self.state['now'], new_state)
         Ut = self.kp * error + self.ki * self.error_i + self.kd * error_d
-        value = cut_abs(Ut, 100)
+        value = (Ut * 5 / 0.5) / self.power.measured_volts * 100
+        # R = 5
+        # Km = 0.5
+        # value = Ut * R / Km / Umax * 100%
+        value = cut_abs(value, 100)
         print(dt)
 
         if self.LIMIT_ERR != 0:

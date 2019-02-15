@@ -1,6 +1,7 @@
 import time
 import math
 from ev3dev.ev3 import *
+from ev3dev.core import *
 
 def cut_abs(value, max):
     return max * math.copysign(1, value) if abs(value) > max else value
@@ -17,6 +18,7 @@ class PI:
         self.motor.reset()
         self.wdup = wdup
         self.launch_time = time.time()
+        self.power = PowerSupply()
 
     def set_wanted_spd(self, wanted_spd, wanted_pos):
         self.state['wanted_spd'] = wanted_spd + self.kp * (wanted_pos - self.state['now_pos'])
@@ -32,8 +34,13 @@ class PI:
         (self.state['last_pos'], self.state['now_pos']) = (self.state['now_pos'], new_state_pos)
         new_state_spd = (self.state['now_pos'] - self.state['last_pos']) / dt
         (self.state['last_spd'], self.state['now_spd']) = (self.state['now_spd'], new_state_spd)
+
         Ut = self.kp * error + self.ki * self.error_i
-        value = cut_abs(Ut, 100)
+        value = (Ut * 5 / 0.5) / self.power.measured_volts * 100
+        # R = 5
+        # Km = 0.5
+        # value = Ut * R / Km / Umax * 100%
+        value = cut_abs(value, 100)
         self.motor.run_direct(duty_cycle_sp = value)
 
     def get_state_spd(self):
