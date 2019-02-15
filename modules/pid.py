@@ -15,6 +15,9 @@ class PID:
         self.LIMIT_ERR = 0
         self.neg_lim = -math.pi
         self.pos_lim = math.pi
+        self.power = PowerSupply()
+        self.launch_time = time.time()
+        self.file_handle = open('log_pid_new_new7.txt', 'w')
 
     def set_limits(self, negative, positive):
         self.neg_lim = negative
@@ -42,7 +45,7 @@ class PID:
         if self.wdup != 0:
             self.error_i = self.error_i if abs(self.error_i) < self.wdup else math.copysign(1, self.error_i) * self.wdup
 
-        new_state = self.motor.position / 180 * math.pi
+        new_state = self.motor.position / 180 * math.pi / 5.5
         if new_state > self.pos_lim:
             self.LIMIT_ERR = 1
         elif new_state < self.neg_lim:
@@ -57,7 +60,7 @@ class PID:
         # Km = 0.5
         # value = Ut * R / Km / Umax * 100%
         value = cut_abs(value, 100)
-        print(dt)
+
 
         if self.LIMIT_ERR != 0:
             if math.copysign(1, self.LIMIT_ERR) == math.copysign(1, value):
@@ -65,6 +68,9 @@ class PID:
                 return "limit+" if self.LIMIT_ERR > 0 else "limit-" + " error, (" + str(new_state) + " rad), lim[" + str(self.neg_lim) + ";" + str(self.pos_lim) + "], " + str(self.LIMIT_ERR)
 
         self.motor.run_direct(duty_cycle_sp = value)
+
+        self.file_handle.write(str(self.state['now']) + " " + str(time.time() - self.launch_time) + "\n")
+
         return 'ok'
 
     def get_state(self):

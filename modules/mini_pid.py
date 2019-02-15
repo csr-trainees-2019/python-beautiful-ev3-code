@@ -16,6 +16,7 @@ class PID:
         self.neg_lim = -math.pi
         self.pos_lim = math.pi
         self.wdup = wdup
+        self.power = PowerSupply()
 
     def set_limits(self, negative, positive):
         self.neg_lim = negative
